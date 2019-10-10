@@ -1,0 +1,16 @@
+{% macro render_list(pagination) %}
+<div class="row">
+    {% for page in pagination.items %}
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+          <img src="#" alt="">
+          <div class="caption">
+              <h4 class="analysis_name"">{{ page.name }}</h4>
+              <p class="analisis_description">{{ page.description }}</p>
+          </div>
+          <a class="btn btn-primary" href={{ page.url }} role="button">详情</a>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+{% endmacro %}

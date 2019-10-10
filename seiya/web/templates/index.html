@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% from 'macros.html' import render_list %}
+
+{% block title %}Seiya数据分析系统-首页{% endblock %}
+
+{% block body %}
+{{ render_list(pagination)}}
+{% endblock %}
