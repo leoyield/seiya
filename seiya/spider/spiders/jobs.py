@@ -6,7 +6,7 @@ import re
 class JobsSpider(scrapy.Spider):
     name = 'jobs'
     allowed_domains = ['lagou.com']
-    start_urls = ['http://www.lagou.com/zhaopin/{}'.format(x) for x in range(1,2)]
+    start_urls = ['https://www.lagou.com/zhaopin/{}/'.format(x) for x in range(1,31)]
 
     def parse(self, response):
         for job in response.css('ul.item_con_list li'):

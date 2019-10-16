@@ -1,0 +1,64 @@
+<body>
+<div id="mountNode"></div>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+<script>
+  var data = [{
+    item: '事例一',
+    count: 40,
+    percen: 0.4
+  }, {
+    item: '事例二',
+    count: 21,
+    percen: 0.21
+  }, {
+    item: '事例三',
+    count: 17,
+    percen: 0.17
+  }, {
+    item: '事例四',
+    count: 13,
+    percen: 0.13
+  }, {
+    item: '事例五',
+    count: 9,
+    percen: 0.09
+  }];
+  var chart = new G2.Chart({
+    container: 'mountNode',
+    forceFit: true,
+    height: window.innerHeight
+  });
+  chart.source(data, {
+    percent: {
+      formatter: function formatter(val) {
+        val = val * 100 + '%';
+        return val;
+      }
+    }
+  });
+  chart.coord('theta', {
+    radius: 0.75
+  });
+  chart.tooltip({
+    showTitle: false,
+    itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+  });
+  chart.intervalStack().position('percen').color('item').label('percen', {
+    formatter: function formatter(val, item) {
+      return item.point.item + ': ' + val* 100 + '%';
+    }
+  }).tooltip('item*percen', function(item, percent) {
+    percent = percent * 100 + '%';
+    return {
+      name: item,
+      value: percent
+    };
+  }).style({
+    lineWidth: 1,
+    stroke: '#fff'
+  });
+  chart.render();
+</script>
+</body>

@@ -5,7 +5,7 @@
       <div class="thumbnail">
           <img src="#" alt="">
           <div class="caption">
-              <h4 class="analysis_name"">{{ page.name }}</h4>
+              <h4 class="analysis_name">{{ page.name }}</h4>
               <p class="analisis_description">{{ page.description }}</p>
           </div>
           <a class="btn btn-primary" href={{ page.url }} role="button">详情</a>
@@ -13,4 +13,128 @@
     </div>
     {% endfor %}
 </div>
+{% endmacro %}
+
+{% macro render_bar(data, xy, x, y) %}
+<div id="c1"></div>
+    <script>
+      const data = {{ data|tojson }};
+
+      const chart = new G2.Chart({
+        container: 'c1', // 指定图表容器 ID
+        width : 1100, // 指定图表宽度
+        height : 500 // 指定图表高度
+      });
+      // Step 2: 载入数据源
+      chart.source(data,
+      {
+  '{{ x }}': {
+    type: 'cat'
+  },
+  '{{ y }}': {
+    min: 0
+  }});
+      // Step 3：创建图形语法，绘制柱状图，由 genre 和 sold 两个属性决定图形位置，genre 映射至 x 轴，sold 映射至 y 轴
+      chart.interval().position('{{ xy }}').color('{{ x }}')
+      chart.legend('{{ x }}', false);
+      // Step 4: 渲染图表
+      chart.render();
+    </script>
+{% endmacro %}
+
+{% macro render_table(x, y, enum) %}
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">排名</th>
+        <th scope="col">{{ x }}</th>
+        <th scope="col">{{ y }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for numb, city in enum %}
+      <tr>
+        <th scope="row">{{ numb + 1 }}</th>
+        <td>{{ city.get(x) }}</td>
+        <td>{{ city.get(y) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% endmacro %}
+
+{% macro render_pi(data, x, y, percent) %}
+<body>
+  <div id="mountNode"></div>
+  <script>
+    var data = {{ data|tojson }};
+    var chart = new G2.Chart({
+      container: 'mountNode',
+      forceFit: true,
+      height: window.innerHeight
+    });
+    chart.source(data, {
+      percent: {
+        formatter: function formatter(val) {
+          val = val * 100 + '%';
+          return val;
+        }
+      }
+    });
+    chart.coord('theta', {
+      radius: 0.75
+    });
+    chart.tooltip({
+      showTitle: false,
+      itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value}</li>'
+    });
+    chart.intervalStack().position('{{ percent }}').color('{{ x }}').label('{{ percent }}', {
+      formatter: function formatter(val, {{ x }}) {
+        return {{ x }}.point.{{ x }} + ': ' + val * 100 + '%';
+      }
+    }).tooltip('{{ x+"*"+percent }}', function({{ x }}, {{ percent }}) {
+      {{ percent }} = {{ percent }} * 100 + '%';
+      return {
+        name: {{ x }},
+        value: {{ percent }}
+      };
+    }).style({
+      lineWidth: 1,
+      stroke: '#fff'
+    });
+    chart.render();
+  </script>
+</body>
+{% endmacro %}
+
+{% macro render_line(data, x, y, z) %}
+<div id="mountNode"></div>
+<script>
+  var data = {{ data|tojson }};
+
+  var chart = new G2.Chart({
+    container: 'mountNode',
+    forceFit: true,
+    height: window.innerHeight
+  });
+  chart.source(data);
+  chart.tooltip({
+    crosshairs: {
+      type: 'line'
+    }
+  });
+  chart.axis('{{ y }}', {
+    label: {
+      formatter: function formatter(val) {
+        return val + 'K';
+      }
+    }
+  });
+  chart.line().position('{{ z + "*" + y }}').color('{{ x }}');
+  chart.point().position('{{ z + "*" + y }}').color('{{ x }}').size(4).shape('circle').style({
+    stroke: '#fff',
+    lineWidth: 1
+  });
+  chart.render();
+</script>
 {% endmacro %}

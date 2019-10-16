@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import render_bar, render_table, render_pi, render_line %}
+
+{% block head_css%}
+{{ super() }}
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.5.1/dist/g2.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.data-set-0.10.1/dist/data-set.min.js"></script>
+{% endblock %}
+
+{% block title%}
+{{ title }}
+{% endblock %}
+
+{% block body %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{{ url_for('index') }}">首页</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('categroy', code='job') }}">拉勾网数据分析</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+    </ol>
+</nav>
+{% if kind=='bar' %}
+  {% if title=='热门职位标签' %}
+  <image src='{{ url_for("hot_tags_png") }}'>
+  {{ render_table(x, y, enum) }}
+  {% else %}
+  {{ render_bar(data, xy, x, y) }}
+  {{ render_table(x, y, enum) }}
+  {% endif %}
+{% elif kind=='pi' %}
+  {{ render_pi(data, x, y, percent) }}
+  {{ render_table(x, y, enum) }}
+{% elif kind=='line' %}
+  {{ render_line(data, x, y, z) }}
+{% endif %}
+{% endblock %}
