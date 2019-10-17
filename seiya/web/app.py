@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, Response
-import sys
-sys.path.append("..")
-from db.base import db, DataAnalysis, JobModel, AnalysisListModel
+from seiya.db.base import db, DataAnalysis, JobModel, AnalysisListModel, HouseModel
 from flask_migrate import Migrate
-from analysis import job
+from seiya.analysis import job, house
 import json
 
 app = Flask(__name__)
@@ -15,7 +13,7 @@ db.init_app(app)
 Migrate(app, db)
 db_dict = {
     'job': JobModel,
-    2: 'LianJia'
+    'renthouse': HouseModel
 }
 
 job_analysis_dict = {
@@ -25,6 +23,13 @@ job_analysis_dict = {
     'education-stat': ['学历要求统计', job.education_stat, 'pi'],
     'experience-stat':['工作经验统计', job.experience_stat, 'pi'],
     'salary-by-city-and-education': ['同等学历不同城市薪资对比', job.salary_by_city_and_education, 'line']
+}
+
+house_analysis_dict = {
+    'quantity-top10': ['房源数量TOP10小区', house.quantity_top10, 'bar'],
+    'house-type-destributed': ['户型分布统计', house.house_type_destributed, 'pi'],
+    'area-destributed': ['面积分布统计', house.area_destributed, 'hist'],
+    'price-type-top10': ['每种户型租金最贵TOP10小区', house.price_type_top10, 'line'],
 }
 
 @app.route('/')
@@ -77,6 +82,21 @@ def jobanalysis(code):
 def hot_tags_png():
     return Response(job.hot_tags()[-1], content_type='image/png')
 
+@app.route('/house/<code>')
+def houseanalysis(code):
+    if house_analysis_dict[code][-1] == 'bar':
+        if code in house_analysis_dict:
+            data, x, y = house_analysis_dict[code][1]()
+            title = house_analysis_dict[code][0]
+        return render_template('house/houseanalysis.html', data=data, xy='{}*{}'.format(x,y), x=x, y=y, enum = enumerate(data), title=title, kind='bar')
+    elif house_analysis_dict[code][-1] == 'pi':
+        data, x, y, percent = house_analysis_dict[code][1]()
+        title = house_analysis_dict[code][0]
+        return render_template('house/houseanalysis.html', data=data, x=x, y=y, percent=percent, enum = enumerate(data), title=title, kind='pi')
+    elif house_analysis_dict[code][-1] == 'line':
+        data, x, y, z = house_analysis_dict[code][1]()
+        title = house_analysis_dict[code][0]
+        return render_template('house/houseanalysis.html', data=data, x=x, y=y, z=z, title=title, kind='line')
 
 if __name__ == '__main__':
 

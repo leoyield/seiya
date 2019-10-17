@@ -51,9 +51,19 @@ class UserAgentMiddleware(_UserAgentMiddleware):
 
     def process_request(self, request, spider):
         ua = random.choice(self.user_agent_list)
-        if ua:
-            print('******UesrAgent:{}******'.format(ua))
-            request.headers.setdefault('User-Agent', ua)
+        if spider.name == 'jobs':
+            if ua:
+                print('******UesrAgent:{}******'.format(ua))
+                request.headers.setdefault('User-Agent', ua)
+                request.headers.setdefault('Host', 'www.lagou.com')
+                request.headers.setdefault('Cookie', 'JSESSIONID=ABAAABAAADEAAFIAF037B646FF75E78F6464F4B9A62FC29; user_trace_token=20191010090442-a62a051e-e45f-4449-b2d2-626aa201a683; WEBTJ-ID=20191010090330-16db33138082e1-0c32c14b401252-3c375f0d-2073600-16db33138095db; _ga=GA1.2.1985291566.1570669410; _gid=GA1.2.1395848530.1570669410; sajssdk_2015_cross_new_user=1; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2216db33139aa899-00dbec05cf3572-3c375f0d-2073600-16db33139aba31%22%2C%22%24device_id%22%3A%2216db33139aa899-00dbec05cf3572-3c375f0d-2073600-16db33139aba31%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E7%9B%B4%E6%8E%A5%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22%22%2C%22%24latest_referrer_host%22%3A%22%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC_%E7%9B%B4%E6%8E%A5%E6%89%93%E5%BC%80%22%7D%7D; Hm_lvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1570669411; LGUID=20191010090443-f1eed058-eaf9-11e9-99a6-525400f775ce; SEARCH_ID=5bc3a38e1899421ca7a1145e311f323f; LGSID=20191010151851-35b32102-eb2e-11e9-99c0-525400f775ce; PRE_UTM=; PRE_HOST=; PRE_SITE=; PRE_LAND=https%3A%2F%2Fwww.lagou.com%2F; index_location_city=%E5%85%A8%E5%9B%BD; X_HTTP_TOKEN=80d07a25cee4e8873202960751d221bac43f7f1a82; Hm_lpvt_4233e74dff0ae5bd0a3d81c6ccf756e6=1570691968; LGRID=20191010152040-76c1f4b4-eb2e-11e9-99c0-525400f775ce')
+        elif spider.name == 'houses':
+            if ua:
+                print('******UesrAgent:{}******'.format(ua))
+                request.headers.setdefault('User-Agent', ua)
+                request.headers.setdefault('Host', 'gy.lianjia.com')
+                request.headers.setdefault('Cookie', 'lianjia_uuid=6e88dc26-d5a7-44b4-9f0b-31d53ef00bd2; _smt_uid=5da6cd77.92861d1; UM_distinctid=16dd3929b937c0-0fdccd515b0b22-3c375f0d-1fa400-16dd3929b9449d; _jzqa=1.983898288894835600.1571212664.1571212664.1571212664.1; _jzqc=1; _jzqx=1.1571212664.1571212664.1.jzqsr=cd%2Elianjia%2Ecom|jzqct=/zufang/.-; _jzqckmp=1; sajssdk_2015_cross_new_user=1; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2216dd3929c8f86-0926b6772fd0ae-3c375f0d-2073600-16dd3929c90a18%22%2C%22%24device_id%22%3A%2216dd3929c8f86-0926b6772fd0ae-3c375f0d-2073600-16dd3929c90a18%22%2C%22props%22%3A%7B%7D%7D; _ga=GA1.2.34693991.1571212666; _gid=GA1.2.1558603043.1571212666; select_city=520100; all-lj=762328e22710c88ff41f391dedabbc6f; CNZZDATA1254525948=715804443-1571211097-https%253A%252F%252Fwww.lianjia.com%252F%7C1571211097; CNZZDATA1255633284=1572664829-1571208789-https%253A%252F%252Fwww.lianjia.com%252F%7C1571208789; CNZZDATA1255604082=764595384-1571211541-https%253A%252F%252Fwww.lianjia.com%252F%7C1571211541; _qzja=1.1359645162.1571212840721.1571212840721.1571212840722.1571212840721.1571212840722.0.0.0.1.1; _qzjc=1; _qzjto=1.1.0; lianjia_ssid=9772637b-4d87-4bdf-8e24-42123656c8dc; srcid=eyJ0Ijoie1wiZGF0YVwiOlwiM2UwZmYwZjEyZjc5ZTliNTI1NjI0NmY1YWQyMjI4N2VkYTVkZjZjZTNhMDBhMTAyMzQ1NmZkODhkNjA5MDdiNTllMWI3ODQzZTBiMzM0MmMxMjM2ZWQ2MzRjODBjYzdjMGE4Mzk3NWRhZmMwM2MzMDcwMDQzMWZmODJjNjQzNDBjZmM4ZmNjZWVmYmM5NjZkY2RmOTg3ZTM5MmNiZjdmZGE0M2M4YjMyZGI3MDk1MGFiY2YzMjQ0NzcyNTQ5ZmY4MjdiNTJkZDYzYTU3MmQyYTM0MGFkZDEzN2Q3MGZlNGRmMDc1Mjg0OWFkYzJjOGMzYjA2ODYzNzJmNWEwOWU0NGI3NDM5Y2Y3NDBjZDRlNjRjMzUyNTkzZjBhNGMxNzAyOWNmOTRkOTRiNWUzOTBhN2JhMmNjYzk2MjY1YTdjYjNcIixcImtleV9pZFwiOlwiMVwiLFwic2lnblwiOlwiODJiMjFiYWJcIn0iLCJyIjoiaHR0cHM6Ly9neS5saWFuamlhLmNvbS96dWZhbmcvcGcxcnQyMDA2MDAwMDAwMDEvJTNFIiwib3MiOiJ3ZWIiLCJ2IjoiMC4xIn0=')
+
 
 class SpiderSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,

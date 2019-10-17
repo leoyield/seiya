@@ -18,6 +18,19 @@ class JobsItem(scrapy.Item):
     tags = scrapy.Field()
     company = scrapy.Field()
 
+class HousesItem(scrapy.Item):
+    title = scrapy.Field()
+    region = scrapy.Field()
+    street = scrapy.Field()
+    community = scrapy.Field()
+    area = scrapy.Field()
+    direction = scrapy.Field()
+    house_type = scrapy.Field()
+    floor = scrapy.Field()
+    building_height = scrapy.Field()
+    tags = scrapy.Field()
+    price = scrapy.Field()
+
 class SpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()

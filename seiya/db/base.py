@@ -21,6 +21,7 @@ class DataAnalysis(Base):
     code = db.Column(db.String(32), unique=True, index=True)
     description = db.Column(db.String(256))
     tlagou = db.relationship('JobModel')
+    tlianjia = db.relationship('HouseModel')
     analysislist = db.relationship('AnalysisListModel')
 
     @property
@@ -43,6 +44,25 @@ class JobModel(Base):
     analysis_id = db.Column(db.Integer, db.ForeignKey('dataanalysis.id', ondelete='CASCADE'), default=1)
     analysis = db.relationship('DataAnalysis', backref=db.backref('jobmodel', cascade='all, delete-orphan'))
 
+class HouseModel(Base):
+    __tablename__ = 'housemodel'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(64), index=True, nullable=False)
+    region = db.Column(db.String(64), nullable=True)
+    street = db.Column(db.String(64), nullable=True)
+    community = db.Column(db.String(64), nullable=False)
+    area = db.Column(db.Integer, nullable=True)
+    direction = db.Column(db.String(64), nullable=True)
+    house_type = db.Column(db.String(64), nullable=True)
+    floor = db.Column(db.String(64), nullable=True)
+    building_height = db.Column(db.Integer, nullable=True)
+    tags = db.Column(db.String(256), nullable=True)
+    price = db.Column(db.Integer, nullable=False)
+
+    analysis_id = db.Column(db.Integer, db.ForeignKey('dataanalysis.id', ondelete='CASCADE'), default=2)
+    analysis = db.relationship('DataAnalysis', backref=db.backref('housemodel', cascade='all, delete-orphan'))
+
 class AnalysisListModel(Base):
     __tablename__ = 'analysislistmodel'
 
@@ -55,4 +75,7 @@ class AnalysisListModel(Base):
 
     @property
     def url(self):
-        return url_for('jobanalysis', code=self.code)
+        if self.analysis_id == 1:
+            return url_for('jobanalysis', code=self.code)
+        elif self.analysis_id == 2:
+            return url_for('houseanalysis', code=self.code)

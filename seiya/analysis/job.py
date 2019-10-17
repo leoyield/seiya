@@ -1,6 +1,4 @@
-import sys
-sys.path.append("..")
-from db.base import JobModel
+from seiya.db.base import JobModel
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import func
