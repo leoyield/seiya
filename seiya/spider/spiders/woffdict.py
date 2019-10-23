@@ -12,16 +12,6 @@ class Woff(object):
         self.css = requests(self.this_css).text
         self.di_li = re.findall('\("embedded-opentype"\),url\((.+?){font-family', self.css)
         self.dianp_dict = {}
-        for i in self.di_li:
-            if 'shopNum' in i:
-                self.dianp_dict['shopNum'] = 'http:' + re.findall('\"(.+)\"', i)[0]
-            elif 'tagName' in i:
-                self.dianp_dict['tagName'] = 'http:' + re.findall('\"(.+)\"', i)[0]
-            elif 'address' in i:
-                self.dianp_dict['address'] = 'http:' + re.findall('\"(.+)\"', i)[0]
-        for name in self.dianp_dict:
-            with open('{}.woff'.format(name), 'wb') as f:
-                f.write(requests.get(self.dianp_dict['{}'.format(name)]).content)
         self.string = '''1234567890店中美家馆
 小车大市公酒行国品发电金心业商司
 超生装园场食有新限天面工服海华水
@@ -60,7 +50,21 @@ class Woff(object):
 话强当更板知己无酸让入啦式笑赞片
 酱差像提队走嫩才刚午接重串回晚微
 周值费性桌拍跟块调糕'''
-    font1 = TTFont('shopNum.woff')
-    font2 = TTFont('address.woff')
-    font3 = TTFont('tagName.woff')
-    woff_string = self.string.replace('\n', '')
+
+    def read_woff(self):
+        for i in self.di_li:
+            if 'shopNum' in i:
+                self.dianp_dict['shopNum'] = 'http:' + re.findall('\"(.+)\"', i)[0]
+            elif 'tagName' in i:
+                self.dianp_dict['tagName'] = 'http:' + re.findall('\"(.+)\"', i)[0]
+            elif 'address' in i:
+                self.dianp_dict['address'] = 'http:' + re.findall('\"(.+)\"', i)[0]
+        for name in self.dianp_dict:
+            with open('{}.woff'.format(name), 'wb') as f:
+                f.write(requests.get(self.dianp_dict['{}'.format(name)]).content)
+        font1 = TTFont('shopNum.woff')
+        font2 = TTFont('address.woff')
+        font3 = TTFont('tagName.woff')
+        woff_string = self.string.replace('\n', '')
+        return font1, font2, font3, woff_string
+    
