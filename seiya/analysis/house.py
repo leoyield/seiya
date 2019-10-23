@@ -1,33 +1,19 @@
-from seiya.db.base import HouseModel
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from seiya.db.base import db, HouseModel
 from sqlalchemy import func
+from seiya.analysis.toG2data import Todict
 import pandas as pd
 
-engine = create_engine('mysql+mysqldb://root:123456@localhost:3306/seiya?charset=utf8')
-Session = sessionmaker(bind=engine)
-session = Session()
-
-class Todict(object):
-    def __init__(self, *name):
-        self.name = name
-    def to_dict(self, vctuple):
-        vctuple = list(vctuple)
-        if not isinstance(vctuple[0], int):
-            vctuple[0] = round(float(vctuple[0]), 2)
-        return {self.name[x]: y for x,y in enumerate(vctuple)}
 
 def quantity_top10():
-    data = session.query(func.count(HouseModel.community), HouseModel.community).group_by(HouseModel.community).all()
+    data = db.session.query(func.count(HouseModel.community), HouseModel.community).group_by(HouseModel.community).all()
     data = sorted(data, reverse=True)
-    print(data)
     x = '小区'
     y = '房源数'
     todict = Todict(y, x)
     return list(map(todict.to_dict,data[:10])), x, y
 
 def house_type_destributed():
-    data = session.query(func.count(HouseModel.house_type), HouseModel.house_type).group_by(HouseModel.house_type).all()
+    data = db.session.query(func.count(HouseModel.house_type), HouseModel.house_type).group_by(HouseModel.house_type).all()
     data = sorted(data, reverse=True)
     x = '户型'
     y = '房源数'
@@ -40,10 +26,12 @@ def house_type_destributed():
     return list(map(todict.to_dict,data)), x, y, percent
 
 def area_destributed():
-    pass
+    data = db.session.query(HouseModel.area).all()
+    data = [i[0] for i in data]
+    return data
 
 def price_type_top10():
-    data = session.query(func.avg(HouseModel.price), HouseModel.house_type, HouseModel.community).group_by(HouseModel.community, HouseModel.house_type).all()
+    data = db.session.query(func.avg(HouseModel.price), HouseModel.house_type, HouseModel.community).group_by(HouseModel.community, HouseModel.house_type).all()
     data = sorted(data, reverse=True)
     x = '户型'
     y = '租金'

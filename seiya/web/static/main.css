@@ -1,0 +1,6 @@
+.analysis_name,
+.analisis_description {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap
+  }

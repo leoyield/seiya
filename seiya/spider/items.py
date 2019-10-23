@@ -31,6 +31,17 @@ class HousesItem(scrapy.Item):
     tags = scrapy.Field()
     price = scrapy.Field()
 
+class RestaurantsItem(scrapy.Item):
+    title = scrapy.Field()
+    score = scrapy.Field()
+    review_count = scrapy.Field()
+    consumption = scrapy.Field()
+    classification = scrapy.Field()
+    business_district = scrapy.Field()
+    taste = scrapy.Field()
+    ambience = scrapy.Field()
+    service = scrapy.Field()
+
 class SpiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()

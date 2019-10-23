@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% from 'macros.html' import render_bar, render_table, render_pi, render_line, render_hist %}
+{% from 'macros.html' import render_bar, render_table, render_pi, render_line %}
 
 {% block head_css%}
 {{ super() }}
@@ -16,7 +16,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{{ url_for('index') }}">首页</a></li>
-      <li class="breadcrumb-item"><a href="{{ url_for('categroy', code='renthouse') }}">链家网租房数据分析</a></li>
+      <li class="breadcrumb-item"><a href="{{ url_for('categroy', code='restaurant') }}">点评网餐馆数据分析</a></li>
       <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
     </ol>
 </nav>
@@ -28,7 +28,5 @@
   {{ render_table(x, y, enum) }}
 {% elif kind=='line' %}
   {{ render_line(data, x, y, z) }}
-{% elif kind=='hist' %}
-  {{ render_hist(data) }}
 {% endif %}
 {% endblock %}
