@@ -17,31 +17,7 @@ class RestaurantSpider(scrapy.Spider):
         body = response.text
         this_css = re.findall(r'//s3plus.+?\.css', body)[0]
         woff = Woff(this_css)
-        font1, font2, font3, woff_string = woff.read_woff()
-        r1 = '<svgmtsi class="shopNum">&#x(....);</svgmtsi>'
-        r1r = '<svgmtsi class="shopNum">&#x{};</svgmtsi>'
-        r2 = '<svgmtsi class="address">&#x(....);</svgmtsi>'
-        r2r = '<svgmtsi class="address">&#x{};</svgmtsi>'
-        r3 = '<svgmtsi class="tagName">&#x(....);</svgmtsi>'
-        r3r = '<svgmtsi class="tagName">&#x{};</svgmtsi>'
-        rep = re.findall(r1, body)
-        for i in set(rep):
-            try:
-                body = body.replace(r1r.format(i), woff_string[font1.getGlyphID('uni{}'.format(i))-2])
-            except:
-                continue
-        rep = re.findall(r2, body)
-        for i in set(rep):
-            try:
-                body = body.replace(r2r.format(i), woff_string[font2.getGlyphID('uni{}'.format(i))-2])
-            except:
-                continue
-        rep = re.findall(r3, body)
-        for i in set(rep):
-            try:
-                body = body.replace(r3r.format(i), woff_string[font3.getGlyphID('uni{}'.format(i))-2])
-            except:
-                continue
+        body = woff.decrypt(body)
         myresponse = HtmlResponse(url=url, body=body.encode('utf8'))
         for restaurant in myresponse.css('div.shop-list.J_shop-list.shop-all-list ul li'):
             item = RestaurantsItem({
