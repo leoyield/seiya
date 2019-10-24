@@ -16,6 +16,7 @@ linux: export FLASK_APP=seiya/web/app.py
 win: set FLASK_APP=seiya\web\app.py
 
 # step3:
+# 注意先把连接mysql的密码改成自己本地的mysql密码，本项目连接mysql的密码在web/app.py中的database_keyword变量中修改即可
 # 在项目根目录下用migrate初始化数据库
 flask db init
 flask db migrate
