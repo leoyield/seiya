@@ -113,7 +113,7 @@ def create_data():
         db.session.add(d3)
         db.session.commit()
         print('success create DataAnalysis')
-    elif not AnalysisListModel.query.first():
+    if not AnalysisListModel.query.first():
         print('im in AnalysisListModel')
         a1 = AnalysisListModel(name='职位数 TOP10 城市', code='position-top10', description='按发布职位排名前十的城市', analysis_id=1)
         a2 = AnalysisListModel(name='薪资 TOP10 城市', code='salary-top10', description='按发布薪资排名前十的城市', analysis_id=1)

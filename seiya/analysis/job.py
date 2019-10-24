@@ -25,8 +25,9 @@ def salary_top10():
     return list(map(todict.to_dict,data[:10])), x, y
 
 def hot_tags(format='png'):
+    from seiya.web.app import config_dict
     sql = 'SELECT (tags) from jobmodel'
-    df = pd.read_sql(sql=sql, con=engine)
+    df = pd.read_sql(sql=sql, con=config_dict['SQLALCHEMY_DATABASE_URI'])
     data = df.to_csv(index=0).split()
     data_list = []
     for tag in set(data):
