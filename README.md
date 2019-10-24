@@ -19,6 +19,7 @@ default-character-set = utf8
 
 # step3:
 > 注意先把连接mysql的密码改成自己本地的mysql密码，本项目连接mysql的密码在web/app.py中的database_keyword变量中修改即可
+>
 > 在项目根目录下用migrate初始化数据库
 ```Python
 flask db init
@@ -36,9 +37,13 @@ create_data()
 
 # step5:
 > 项目根目录下运行爬虫，三个爬虫所爬的网站的反爬都比较严格，默认爬虫delay为30，可自行在settings.py文件中修改
+>
 > 点评网的css字典映射已自动解读，解读文件为woffdict.py
+>
 > woffdict.py需要在实例化时接收字典映射css的url，调用实例化方法decrypt时需要接收未解读的网页源代码，运行后返回解读后的网页源代码
+>
 > 爬点评网时最好先手动浏览并验证成功一次后再爬会比较顺利
+>
 > 由于网站改动频繁，爬虫有时效性
 ```Python
 scrapy crawl jobs
