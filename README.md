@@ -2,7 +2,7 @@
 
 # step1:
 >set mysql/my.cnf:
-```Python
+```Vim
 [client]
 default-character-set = utf8
 [mysqld]
